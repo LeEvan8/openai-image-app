@@ -5,13 +5,11 @@ require('dotenv').config();
 
 const app = express();
 
-// Middleware with increased limit for large images
 app.use(cors());
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 app.use(express.static('public'));
 
-// Add error logging middleware
 app.use((err, req, res, next) => {
     console.error('Error:', err);
     res.status(500).json({ 
@@ -20,13 +18,45 @@ app.use((err, req, res, next) => {
     });
 });
 
+const ANALYSIS_PROMPT = `Analyze the cleanliness of the provided image and rank it for each category below on a scale from 3 to 1:
+3: Freshly cleaned with no visible stains, smudges, or debris.
+2: Acceptable cleanliness with minor stains, smudges, or debris visible upon close inspection.
+1: Obvious dirt, smudges, buildup, or other cleanliness issues visible.
+
+For each category, calculate the Category Score as a percentage using the formula:
+Category Score = (Given Score / 3) × Weight
+
+Categories and Weights:
+Ceilings and Walls: 15%
+Windows and Glass: 15%
+Seats and Upholstery: 20%
+Floors: 20%
+Rubbish and Debris: 10%
+Driver's Area: 10%
+Stairs: 5%
+High-Touch Areas: 5%
+
+Output the results as follows:
+Category Scores (percentages):
+Ceilings and Walls: [Score]%
+Windows and Glass: [Score]%
+Seats and Upholstery: [Score]%
+Floors: [Score]%
+Rubbish and Debris: [Score]%
+Driver's Area: [Score]%
+Stairs: [Score]%
+High-Touch Areas: [Score]%
+Total Cleanliness Score: [Score]%
+
+Note: If any category is not visible in the image, default to a score of 2 for that category. Keep the response concise.`;
+
 app.post('/analyze', async (req, res) => {
     try {
-        const { image, question } = req.body;
+        const { image } = req.body;
 
-        if (!image || !question) {
+        if (!image) {
             return res.status(400).json({ 
-                error: 'Missing required fields' 
+                error: 'Missing image data' 
             });
         }
 
@@ -37,12 +67,12 @@ app.post('/analyze', async (req, res) => {
         }
 
         const response = await axios.post('https://api.openai.com/v1/chat/completions', {
-            model: "gpt-4-vision-preview",
+            model: "gpt-4o",
             messages: [
                 {
                     role: "user",
                     content: [
-                        { type: "text", text: question },
+                        { type: "text", text: ANALYSIS_PROMPT},
                         {
                             type: "image_url",
                             image_url: {
@@ -76,4 +106,3 @@ app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
     console.log("http://localhost:3000/")
 });
-
