@@ -18,37 +18,18 @@ app.use((err, req, res, next) => {
     });
 });
 
-const ANALYSIS_PROMPT = `Analyze the cleanliness of the provided image and rank it for each category below on a scale from 3 to 1:
-3: Freshly cleaned with no visible stains, smudges, or debris.
-2: Acceptable cleanliness with minor stains, smudges, or debris visible upon close inspection.
-1: Obvious dirt, smudges, buildup, or other cleanliness issues visible.
+const ANALYSIS_PROMPT = `Analyze the uploaded image of the interior of a public bus to detect visible cleanliness and dirtiness. Focus on the following categories:  
+1. **Dust**: Includes visible dust or dirt on surfaces such as seats, floors, and walls.  
+2. **Trash**: Visible waste items such as wrappers, cans, bottles, or papers.  
+3. **Leaves**: Includes any foliage or natural debris.  
+4. **Liquid Spills**: Includes visible liquid stains, puddles, or wet areas.  
+5. **Non-dirty Items**: Objects such as personal belongings, signage, or functional items (not dirt-related).  
+6. **Other Relevant Observations**: Includes anything else affecting the cleanliness (e.g., graffiti, stains, or broken items).
 
-For each category, calculate the Category Score as a percentage using the formula:
-Category Score = (Given Score / 3) × Weight
-
-Categories and Weights:
-Ceilings and Walls: 15%
-Windows and Glass: 15%
-Seats and Upholstery: 20%
-Floors: 20%
-Rubbish and Debris: 10%
-Driver's Area: 10%
-Stairs: 5%
-High-Touch Areas: 5%
-
-Output the results as follows:
-Category Scores (percentages):
-Ceilings and Walls: [Score]%
-Windows and Glass: [Score]%
-Seats and Upholstery: [Score]%
-Floors: [Score]%
-Rubbish and Debris: [Score]%
-Driver's Area: [Score]%
-Stairs: [Score]%
-High-Touch Areas: [Score]%
-Total Cleanliness Score: [Score]%
-
-Note: If any category is not visible in the image, default to a score of 2 for that category. Keep the response concise.`;
+**Output Requirements:**
+- Display a **pie chart** on the left side showing the percentage breakdown of each detected category, using distinct and contrasting colors for each category.  
+- Provide a **text breakdown** on the right side with the percentage of each category and a brief note for each (e.g., 'Trash: 35% - Includes wrappers and plastic bottles found mostly near seats').  
+- Ensure the output highlights critical cleanliness concerns, like high percentages of trash, liquid spills, or dust.`;
 
 app.post('/analyze', async (req, res) => {
     try {

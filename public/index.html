@@ -3,50 +3,88 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Image Analysis App</title>
-    <link rel="stylesheet" href="styles.css" type="text/css"/>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <title>BusBright - Cleanliness Inspection</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
-
-<div class="topnav" id="myTopnav">
-    <a href="#home" class="active">Home</a>
-    <a href="#about">About</a>
-    <a href="#contact">Contact</a>
-    <a href="javascript:void(0);" class="icon" onclick="myFunction()">
-        <i class="fa fa-bars"></i>
-    </a>
-</div>
-
 <body>
-    <div id="home" class="container">
-        <h1>Image Analysis App</h1>
-        
-        <div class="input-group">
-            <label for="imageInput">Select an image:</label>
-            <input type="file" id="imageInput" accept="image/*">
+    <nav>
+        <div class="logo">
+            <img src="img/busbright-logo.png" alt="BusBright Logo">
         </div>
-        
-        <img id="imagePreview" alt="Preview">
-        
-        <button id="analyzeBtn">Analyze Image</button>
-        
-        <div id="about">
-        
-        </div>   
-        
-        <div id="responseContainer">
-            <h3>Analysis Result:</h3>
-            <div id="responseText"></div>
-            <div id="usageInfo"></div>
+        <div class="nav-right">
+            <a href="#about" class="nav-link">About</a>
+            <a href="#contact" class="nav-link">Contact</a>
+        </div>
+    </nav>
+
+    <main>
+        <div class="portrait">
+            <img src="img/two-buses-poster.png" alt="Buses in Singapore" class="hero-image">
         </div>
 
-        <div id="contact">
-        
-        </div>  
-    </div>
+        <div class="hero">
+            <img src="img/sbsTransit-logo.png" alt="SBS logo" class="sbs-logo">
+            <a href="https://www.sbstransit.com.sg/feedback" target="_blank" class="feedback-btn">SBS Feedback</a>
+        </div>
+
+        <div class="features" >
+            <div class="feature-card" id="about">
+                <div class="feature-icon">
+                    <i class="fas fa-broom"></i>
+                </div>
+                <h3>Cleanliness Inspection</h3>
+                <p>Use CCTV in bus or manually upload image by Ops Staffs during checking.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-robot"></i>
+                </div>
+                <h3>Image Analysis</h3>
+                <p>Use AI algorithms to detect dirt, stains. Calculating a cleanliness score.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-calendar-check"></i>
+                </div>
+                <h3>Cleaning Schedule</h3>
+                <p>Automate scheduling and track cleaning activities per bus model.</p>
+            </div>
+        </div>
+
+        <div class="upload-section">
+            <div class="upload-box">
+                <i class="fas fa-search"></i>
+                <label for="imageInput">Upload to scan</label>
+                <input type="file" id="imageInput" accept="image/*" >
+            </div>
+            <img id="imagePreview" alt="Preview" class="preview-image">
+            <button id="analyzeBtn" class="analyze-btn">Analyze Image</button>
+            <div id="responseContainer" class="response-container">
+                <h3>Analysis Result:</h3>
+                <div id="responseText"></div>
+                <div id="usageInfo"></div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <p>© 2024 BusBright. All rights reserved.</p>
+            <div class="social-links">
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+                <a href="#"><i class="fab fa-telegram"></i></a>
+                <a href="#"><i class="fab fa-youtube"></i></a>
+                <a href="#"><i class="fab fa-linkedin"></i></a>
+                <a href="#"><i class="fas fa-envelope"></i></a>
+            </div>
+        </div>
+    </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="app.js"></script>
-    <script src="navbar.js"></script>
 </body>
 </html>
