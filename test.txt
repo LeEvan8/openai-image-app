@@ -1,0 +1,44 @@
+//?compare bar chart actual and ideal
+//?weightage of bar chart
+//?pie chart calculate cohesively score not number  count of trash
+
+//TO SHOW PIE AND BAR chart
+        <div>
+            <h1>Comparison Chart</h1>
+            <div class="chart-container" style="width: 800px;">
+                <canvas id="bar-chart"></canvas>
+            </div>
+        </div>
+        
+        <div>
+            <h1>Distribution Chart</h1>
+            <div class="chart-container" style="width: 800px;">
+                <canvas id="pie-chart"></canvas>
+            </div>
+        </div>
+
+Item Count:
+Dust: [Count]
+Trash: [Count]
+Leaves: [Count]
+Liquid Spills: [Count]
+Other Dirty Items: [Count]
+Non-dirty Items: [Count]
+
+1. **Dust**: Includes visible dust or dirt on surfaces such as seats, floors, and walls.  
+2. **Trash**: Visible waste items such as wrappers, cans, bottles, or papers.  
+3. **Leaves**: Includes any foliage or natural debris.  
+4. **Liquid Spills**: Includes visible liquid stains, puddles, or wet areas.  
+5. **Non-dirty Items**: Objects such as personal belongings, signage, or functional items (not dirt-related).  
+6. **Other Relevant Observations**: Includes anything else affecting the cleanliness (e.g., graffiti, stains, or broken items).
+
+
+Analyze this bus interior image and provide two analyses:
+1.	Item Count (exact numbers):
+o	Dust:
+o	Trash:
+o	Leaves:
+o	Liquid Spills:
+o	Other Dirty Items:
+o	Non-dirty Items:
+2.	Cleanliness Analysis and Scoring:

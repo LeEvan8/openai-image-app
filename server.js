@@ -17,8 +17,8 @@ app.use((err, req, res, next) => {
         message: err.message 
     });
 });
-
-const ANALYSIS_PROMPT = `Analyze the uploaded image of the interior of a public bus to detect visible cleanliness and dirtiness. Focus on the following categories:  
+const ANALYSIS_PROMPT = `
+Analyze the uploaded image of the interior of a public bus to detect visible cleanliness and dirtiness. Focus on the following categories:  
 1. **Dust**: Includes visible dust or dirt on surfaces such as seats, floors, and walls.  
 2. **Trash**: Visible waste items such as wrappers, cans, bottles, or papers.  
 3. **Leaves**: Includes any foliage or natural debris.  
@@ -26,10 +26,43 @@ const ANALYSIS_PROMPT = `Analyze the uploaded image of the interior of a public 
 5. **Non-dirty Items**: Objects such as personal belongings, signage, or functional items (not dirt-related).  
 6. **Other Relevant Observations**: Includes anything else affecting the cleanliness (e.g., graffiti, stains, or broken items).
 
-**Output Requirements:**
-- Display a **pie chart** on the left side showing the percentage breakdown of each detected category, using distinct and contrasting colors for each category.  
-- Provide a **text breakdown** on the right side with the percentage of each category and a brief note for each (e.g., 'Trash: 35% - Includes wrappers and plastic bottles found mostly near seats').  
-- Ensure the output highlights critical cleanliness concerns, like high percentages of trash, liquid spills, or dust.`;
+
+Analyze this bus interior image and provide two analyses:
+1.	Item Count (exact numbers):
+o	Dust:
+o	Trash:
+o	Leaves:
+o	Liquid Spills:
+o	Other Dirty Items:
+o	Non-dirty Items:
+2.	Cleanliness Analysis and Scoring:
+For each category, rank the cleanliness on a scale from 3 to 1:
+o	3: Freshly cleaned with no visible stains, smudges, or debris.
+o	2: Acceptable cleanliness with minor stains, smudges, or debris visible upon close inspection.
+o	1: Obvious dirt, smudges, buildup, or other cleanliness issues visible.
+Category Scores Calculation: Use the formula:
+Category Score = (Given Score / 3) × Weight
+Categories and Weights:
+o	Ceilings and Walls: 15%
+o	Windows and Glass: 15%
+o	Seats and Upholstery: 20%
+o	Floors: 20%
+o	Rubbish and Debris: 10%
+o	Driver's Area: 10%
+o	Stairs: 5%
+o	High-Touch Areas: 5%
+Output Format:
+Respond ONLY with the following format exactly (no additional text):
+Item Count:
+Dust: [Count]
+Trash: [Count]
+Leaves: [Count]
+Liquid Spills: [Count]
+Other Dirty Items: [Count]
+Non-dirty Items: [Count]
+
+
+`;
 
 app.post('/analyze', async (req, res) => {
     try {
