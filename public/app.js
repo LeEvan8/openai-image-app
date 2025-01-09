@@ -5,91 +5,95 @@ document.addEventListener('DOMContentLoaded', () => {
     const responseContainer = document.getElementById('responseContainer');
     const responseText = document.getElementById('responseText');
     
-    let cleanlinessBarChart, cleanlinessPieChart;
+    let cleanlinessBarChart;
 
-    // Add canvas elements for the charts
+    // Add canvas element for the chart
     const barChartCanvas = document.createElement('canvas');
     barChartCanvas.id = 'cleanlinessBarChart';
-    const pieChartCanvas = document.createElement('canvas');
-    pieChartCanvas.id = 'cleanlinessPieChart';
     responseContainer.appendChild(barChartCanvas);
-    responseContainer.appendChild(pieChartCanvas);
 
-    function createBarChart(labels, data) {
+    // Parse OpenAI response text into chart data
+    function parseAnalysisResponse(responseText) {
+        const lines = responseText.split('\n');
+        const data = [];
+        const labels = [];
+        
+        lines.forEach(line => {
+            if (line.trim()) {
+                const [category, score] = line.split(': ');
+                labels.push(category);
+                data.push(parseFloat(score));
+            }
+        });
+        
+        return { labels, data };
+    }
+
+    function createBarChart(labels, actualData) {
         const ctx = document.getElementById('cleanlinessBarChart').getContext('2d');
+        if (cleanlinessBarChart) {
+            cleanlinessBarChart.destroy();
+        }
+
+        // Define ideal weightage data
+        const idealData = {
+            'Ceilings and Walls': 15,
+            'Windows and Glass': 15,
+            'Seats and Upholstery': 20,
+            'Floors': 20,
+            'Rubbish and Debris': 10,
+            'Driver\'s Area': 10,
+            'Stairs': 5,
+            'High-Touch Areas': 5
+        };
+
+        const idealWeightage = labels.map(label => idealData[label] || 0);
+        
         cleanlinessBarChart = new Chart(ctx, {
             type: 'bar',
             data: {
                 labels: labels,
                 datasets: [{
-                    label: 'Cleanliness Metrics',
-                    data: data,
-                    backgroundColor: [
-                        '#FF3784',
-                        '#36A2EB',
-                        '#4BC0C0',
-                        '#F77825',
-                        '#9966FF',
-                        '#1C1949'
-                    ],
+                    label: 'Actual Score',
+                    data: actualData,
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                },
+                {
+                    label: 'Ideal Weightage',
+                    data: idealWeightage,
+                    backgroundColor: 'rgba(192, 75, 192, 0.2)',
+                    borderColor: 'rgba(192, 75, 192, 1)',
+                    borderWidth: 1
                 }]
             },
             options: {
                 responsive: true,
-                plugins: {
-                    legend: {
-                        display: true,
-                        position: 'top'
-                    },
-                },
                 scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 20,
+                        title: {
+                            display: true,
+                            text: 'Score (%)'
+                        }
+                    },
                     x: {
                         title: {
                             display: true,
                             text: 'Category'
                         }
-                    },
-                    y: {
-                        title: {
-                            display: true,
-                            text: 'Score'
-                        },
-                        beginAtZero: true
                     }
-                }
-            }
-        });
-    }
-
-    function createPieChart(labels, data) {
-        const ctx = document.getElementById('cleanlinessPieChart').getContext('2d');
-        cleanlinessPieChart = new Chart(ctx, {
-            type: 'pie',
-            data: {
-                labels: labels,
-                datasets: [{
-                    data: data,
-                    backgroundColor: [
-                        '#FF3784',
-                        '#36A2EB',
-                        '#4BC0C0',
-                        '#F77825',
-                        '#9966FF',
-                        '#1C1949'
-                    ]
-                }]
-            },
-            options: {
-                responsive: true,
+                },
                 plugins: {
                     legend: {
-                        position: 'right',
-                        labels: {
-                            padding: 20,
-                            font: {
-                                size: 14
-                            }
-                        }
+                        display: true,
+                        position: 'top'
+                    },
+                    title: {
+                        display: true,
+                        text: 'Cleanliness Analysis Results'
                     }
                 }
             }
@@ -138,44 +142,20 @@ document.addEventListener('DOMContentLoaded', () => {
                     return;
                 }
 
-                const data = result.choices[0]?.message?.content;
-
-                // Parse OpenAI's response
-                const itemCounts = {};
-                const categoryScores = {};
-                const totalScoreMatch = data.match(/Total Cleanliness Score:\s+([\d.]+)/);
-                const totalScore = totalScoreMatch ? parseFloat(totalScoreMatch[1]) : 0;
-
-                // Extract item counts
-                const itemCountRegex = /(\w+):\s+(\d+)/g;
-                let match;
-                while ((match = itemCountRegex.exec(data))) {
-                    itemCounts[match[1]] = parseInt(match[2], 10);
+                const analysisText = result.choices[0]?.message?.content;
+                if (!analysisText) {
+                    throw new Error('Invalid response format');
                 }
 
-                // Extract category scores
-                const categoryScoreRegex = /(\w+(?:\s\w+)*):\s+([\d.]+)/g;
-                while ((match = categoryScoreRegex.exec(data))) {
-                    categoryScores[match[1]] = parseFloat(match[2]);
-                }
+                const { labels, data } = parseAnalysisResponse(analysisText);
+                createBarChart(labels, data);
 
-                // Reset existing charts
-                if (cleanlinessBarChart) cleanlinessBarChart.destroy();
-                if (cleanlinessPieChart) cleanlinessPieChart.destroy();
-
-                // Update charts dynamically
-                const labels = Object.keys(itemCounts);
-                const counts = Object.values(itemCounts);
-                createBarChart(labels, counts);
-                createPieChart(labels, counts);
-
-                responseText.textContent = `Analysis Complete: Total Cleanliness Score: ${totalScore}`;
+                responseText.textContent = 'Analysis Complete';
             } catch (error) {
                 responseText.textContent = 'Error analyzing image. Please try again.';
                 console.error(error);
             }
         };
-
         reader.readAsDataURL(file);
     });
 });

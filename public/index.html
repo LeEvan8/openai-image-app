@@ -6,9 +6,7 @@
     <title>BusBright - Cleanliness Inspection</title>
     <link rel="stylesheet" href="/css/styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <style>
-        
-    </style>
+    
 </head>
 <body>
     <nav>
@@ -59,9 +57,10 @@
 
         <div class="upload-section">
             <div class="upload-box">
-                <i class="fas fa-search"></i>
+                <i class="fas fa-upload"></i>
                 <label for="imageInput">Upload to scan</label>
-                <input type="file" id="imageInput" accept="image/*" >
+                <input type="file" id="imageInput" accept="image/*" hidden ><br>
+                <input type="text" id="plateNumber" placeholder="Enter Plate Number">
             </div>
             <img id="imagePreview" alt="Preview" class="preview-image">
             <button id="analyzeBtn" class="analyze-btn">Analyze Image</button>
@@ -71,21 +70,12 @@
                 <div id="usageInfo"></div>
             </div>
         </div>
-        <div>
-            <h1>Comparison Chart</h1>
-            <div class="chart-container" style="width: 800px;">
-                <canvas id="bar-chart"></canvas>
-            </div>
-        </div>
-        
-        <div>
-            <h1>Distribution Chart</h1>
-            <div class="chart-container" style="width: 800px;">
-                <canvas id="pie-chart"></canvas>
-            </div>
+        <div id="responseContainer" class="response-container">
+            <h3>Analysis Result:</h3>
+            <div id="responseText"></div>
+            <div id="rawResponse" class="raw-response"></div>
         </div>
 
-        
     </main>
 
     <footer>
@@ -106,6 +96,7 @@
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
     <script src="app.js"></script>
-    <script type="module" src="/components/newchart.js"></script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 </body>
 </html>

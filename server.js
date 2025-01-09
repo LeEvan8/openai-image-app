@@ -18,42 +18,9 @@ app.use((err, req, res, next) => {
     });
 });
 const ANALYSIS_PROMPT = `
-Analyze the uploaded image of the interior of a public bus to detect visible cleanliness and dirtiness. Focus on the following categories:  
-1. **Dust**: Includes visible dust or dirt on surfaces such as seats, floors, and walls.  
-2. **Trash**: Visible waste items such as wrappers, cans, bottles, or papers.  
-3. **Leaves**: Includes any foliage or natural debris.  
-4. **Liquid Spills**: Includes visible liquid stains, puddles, or wet areas.  
-5. **Non-dirty Items**: Objects such as personal belongings, signage, or functional items (not dirt-related).  
-6. **Other Relevant Observations**: Includes anything else affecting the cleanliness (e.g., graffiti, stains, or broken items).
-
-
-Analyze this bus interior image and provide two analyses:
-1.	Item Count (exact numbers):
-o	Dust:
-o	Trash:
-o	Leaves:
-o	Liquid Spills:
-o	Other Dirty Items:
-o	Non-dirty Items:
-2.	Cleanliness Analysis and Scoring:
-For each category, rank the cleanliness on a scale from 3 to 1:
-o	3: Freshly cleaned with no visible stains, smudges, or debris.
-o	2: Acceptable cleanliness with minor stains, smudges, or debris visible upon close inspection.
-o	1: Obvious dirt, smudges, buildup, or other cleanliness issues visible.
-Category Scores Calculation: Use the formula:
-Category Score = (Given Score / 3) × Weight
-Categories and Weights:
-o	Ceilings and Walls: 15%
-o	Windows and Glass: 15%
-o	Seats and Upholstery: 20%
-o	Floors: 20%
-o	Rubbish and Debris: 10%
-o	Driver's Area: 10%
-o	Stairs: 5%
-o	High-Touch Areas: 5%
-Output Format:
-Respond ONLY with the following format exactly (no additional text):
-Item Count:
+Task: For each category, calculate 'Score' according to each weight (If unable to detect from image, take out said category). 
+Dust: Includes visible dust or dirt on surfaces such as seats, floors, and walls. Trash: Visible waste items such as wrappers, cans, bottles, or papers. Leaves: Includes any foliage or natural debris. Liquid Spills: Includes visible liquid stains, puddles, or wet areas. Non-dirty Items: Objects such as personal belongings, signage, or functional items (not dirt-related). Other Relevant Observations: Includes anything else affecting the cleanliness (e.g., graffiti, stains, or broken items).
+Respond ONLY in the following format, replacing [Score] with the calculated values, do not write anything extra:
 Dust: [Count]
 Trash: [Count]
 Leaves: [Count]
@@ -62,6 +29,26 @@ Other Dirty Items: [Count]
 Non-dirty Items: [Count]
 
 
+
+
+Ceilings and Walls: [Score]
+Windows and Glass: [Score]
+Seats and Upholstery: [Score]
+Floors: [Score]
+Rubbish and Debris: [Score]
+Driver's Area: [Score]
+Stairs: [Score]
+High-Touch Areas: [Score]
+
+Output example:
+Ceilings and Walls: [15]
+Windows and Glass: [10]
+Seats and Upholstery: [6.67]
+Floors: [20]
+Rubbish and Debris: [6.67]
+Driver's Area: [10]
+Stairs: [1.67]
+High-Touch Areas: [3.33]
 `;
 
 app.post('/analyze', async (req, res) => {
