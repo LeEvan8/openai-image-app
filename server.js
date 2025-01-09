@@ -18,18 +18,8 @@ app.use((err, req, res, next) => {
     });
 });
 const ANALYSIS_PROMPT = `
-Task: For each category, calculate 'Score' according to each weight (If unable to detect from image, take out said category). 
-Dust: Includes visible dust or dirt on surfaces such as seats, floors, and walls. Trash: Visible waste items such as wrappers, cans, bottles, or papers. Leaves: Includes any foliage or natural debris. Liquid Spills: Includes visible liquid stains, puddles, or wet areas. Non-dirty Items: Objects such as personal belongings, signage, or functional items (not dirt-related). Other Relevant Observations: Includes anything else affecting the cleanliness (e.g., graffiti, stains, or broken items).
+Task: For each category, calculate 'Score' according to each weight (If unable to detect from image, take out said category). Each category Weight: Ceilings and Walls: 15, Windows and Glass: 15, Seats and Upholstery: 20, Floors: 20, Rubbish and Debris: 10, Driver's, Area: 10, Stairs: 5, High-Touch Areas: 5.
 Respond ONLY in the following format, replacing [Score] with the calculated values, do not write anything extra:
-Dust: [Count]
-Trash: [Count]
-Leaves: [Count]
-Liquid Spills: [Count]
-Other Dirty Items: [Count]
-Non-dirty Items: [Count]
-
-
-
 
 Ceilings and Walls: [Score]
 Windows and Glass: [Score]
