@@ -30,7 +30,6 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
     });
-
     // Pie Chart
     const pieCtx = document.getElementById('pie-chart').getContext('2d');
     new Chart(pieCtx, {

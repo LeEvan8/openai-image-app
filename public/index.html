@@ -70,11 +70,44 @@
                 <div id="usageInfo"></div>
             </div>
         </div>
-        <div id="responseContainer" class="response-container">
-            <h3>Analysis Result:</h3>
-            <div id="responseText"></div>
-            <div id="rawResponse" class="raw-response"></div>
+        
+        <div class="total">
+            <h2>Total Cleanliness Score: </h2>
+            <p>76%</p>
         </div>
+        <div class="response-container">
+            <form id="assessmentForm" class="assessment-form">
+                <div class="form-group">
+                    <label for="isComplete">Please Select the category</label>
+                    <select name="isComplete" id="isComplete">
+                        <option value="yes">Ceiling</option>
+                        <option value="no">Floorboard</option>
+                        <option value="no">Side Walls</option>
+                        <option value="no">Window glass</option>
+                        <option value="no">Stairs, stanchion poles, handrails & hand straps</option>
+                        <option value="no">Seat frame & handle</option>
+                        <option value="no">Driver’s seat/ partition/ Steering Wheel</option>
+                    </select>
+                </div>
+    
+                <div class="form-group">
+                    <label for="score">Score Percentage:</label>
+                    <input 
+                        type="number" 
+                        name="score" 
+                        id="score"
+                        min="0" 
+                        max="100"
+                        placeholder="Enter score (0-100)"
+                    >
+                </div>
+    
+                <button type="submit" class="analyze-btn">
+                    Submit Assessment
+                </button>
+            </form>
+        </div>
+
 
     </main>
 
@@ -96,7 +129,7 @@
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
     <script src="app.js"></script>
-    
+    <script src="newchart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 </body>
 </html>
